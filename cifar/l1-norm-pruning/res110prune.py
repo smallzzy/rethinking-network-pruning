@@ -14,6 +14,8 @@ from models import *
 parser = argparse.ArgumentParser(description='PyTorch Slimming CIFAR prune')
 parser.add_argument('--dataset', type=str, default='cifar10',
                     help='training dataset (default: cifar10)')
+parser.add_argument('--dataset_dir', type=str, default='~/dataset',
+                    help='training dataset position')
 parser.add_argument('--test-batch-size', type=int, default=256, metavar='N',
                     help='input batch size for testing (default: 256)')
 parser.add_argument('--no-cuda', action='store_true', default=False,
@@ -56,13 +58,13 @@ def test(model):
     kwargs = {'num_workers': 1, 'pin_memory': True} if args.cuda else {}
     if args.dataset == 'cifar10':
         test_loader = torch.utils.data.DataLoader(
-            datasets.CIFAR10('./data.cifar10', train=False, transform=transforms.Compose([
+            datasets.CIFAR10(args.dataset_dir, train=False, transform=transforms.Compose([
                 transforms.ToTensor(),
                 transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010))])),
             batch_size=args.test_batch_size, shuffle=False, **kwargs)
     elif args.dataset == 'cifar100':
         test_loader = torch.utils.data.DataLoader(
-            datasets.CIFAR100('./data.cifar100', train=False, transform=transforms.Compose([
+            datasets.CIFAR100(args.dataset_dir, train=False, transform=transforms.Compose([
                 transforms.ToTensor(),
                 transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010))])),
             batch_size=args.test_batch_size, shuffle=False, **kwargs)

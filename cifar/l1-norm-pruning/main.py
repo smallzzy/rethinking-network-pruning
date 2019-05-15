@@ -18,6 +18,8 @@ import models
 parser = argparse.ArgumentParser(description='PyTorch Slimming CIFAR training')
 parser.add_argument('--dataset', type=str, default='cifar100',
                     help='training dataset (default: cifar100)')
+parser.add_argument('--dataset_dir', type=str, default='~/dataset',
+                    help='training dataset position')
 parser.add_argument('--batch-size', type=int, default=64, metavar='N',
                     help='input batch size for training (default: 64)')
 parser.add_argument('--test-batch-size', type=int, default=256, metavar='N',
@@ -60,7 +62,7 @@ if not os.path.exists(args.save):
 kwargs = {'num_workers': 1, 'pin_memory': True} if args.cuda else {}
 if args.dataset == 'cifar10':
     train_loader = torch.utils.data.DataLoader(
-        datasets.CIFAR10('./data.cifar10', train=True, download=True,
+        datasets.CIFAR10(args.dataset_dir, train=True, download=True,
                        transform=transforms.Compose([
                            transforms.Pad(4),
                            transforms.RandomCrop(32),
@@ -70,14 +72,14 @@ if args.dataset == 'cifar10':
                        ])),
         batch_size=args.batch_size, shuffle=True, **kwargs)
     test_loader = torch.utils.data.DataLoader(
-        datasets.CIFAR10('./data.cifar10', train=False, transform=transforms.Compose([
+        datasets.CIFAR10(args.dataset_dir, train=False, transform=transforms.Compose([
                            transforms.ToTensor(),
                            transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010))
                        ])),
         batch_size=args.test_batch_size, shuffle=True, **kwargs)
 else:
     train_loader = torch.utils.data.DataLoader(
-        datasets.CIFAR100('./data.cifar100', train=True, download=True,
+        datasets.CIFAR100(args.dataset_dir, train=True, download=True,
                        transform=transforms.Compose([
                            transforms.Pad(4),
                            transforms.RandomCrop(32),
@@ -87,7 +89,7 @@ else:
                        ])),
         batch_size=args.batch_size, shuffle=True, **kwargs)
     test_loader = torch.utils.data.DataLoader(
-        datasets.CIFAR100('./data.cifar100', train=False, transform=transforms.Compose([
+        datasets.CIFAR100(args.dataset_dir, train=False, transform=transforms.Compose([
                            transforms.ToTensor(),
                            transforms.Normalize((0.4914, 0.4822, 0.4465), (0.2023, 0.1994, 0.2010))
                        ])),
